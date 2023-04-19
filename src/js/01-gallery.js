@@ -1,6 +1,4 @@
-// Add imports above this line
 import { galleryItems } from './gallery-items';
-// Change code below this line
 
 // console.log(galleryItems);
 import SimpleLightbox from "simplelightbox";
@@ -31,7 +29,7 @@ containerGAllery.addEventListener('click', (event)=>event.preventDefault());
     captionsData:'alt',
      captionDelay:250
     });
-// galleryHandler.on('show.simplelightbox', function (e) {
-//    let img=e.target.childNodes
-//    img[1].alt =img[1].alt + ': comentario'; 
-// });
+galleryHandler.on('show.simplelightbox', function (e) {
+   let img=e.target.childNodes
+   img[1].alt =img[1].alt + ': comentario'; 
+});
