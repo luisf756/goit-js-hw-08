@@ -1,39 +1,48 @@
 import throttle from 'lodash.throttle';
 
-// player.on('timeupdate', throttle(() => {
-//     player.getCurrentTime().then((seconds) => {
-//         localStorage.setItem("videoplayer-current-time", seconds)
-//         // console.log(localStorage.getItem("videoplayer-current-time"))
-//     }).catch((error) => {
-//         console.log('Ha ocurrido un error!');
-//     });
-// }, 1000));
-
 const form = document.querySelector(".feedback-form");
-// const output = document.querySelector("#output");
-// const LOCALSTORAGE_KEY = "feedback-form-state";
-const childrens = form.children;
-for (let element of childrens) {
-    if (element.firstElementChild != null) {
-        element.firstElementChild.classList.add(`feedback-form__${element.firstElementChild.getAttribute('name')}`);
-    } else {
-        element.classList.add(`feedback-form__${element.getAttribute('type')}`);
+
+const emailiNPUT = document.querySelector('label [name="email"]');
+const messageInput = document.querySelector('label [name="message"]');
+const LOCALSTORAGE_KEY = "feedback-form-state";
+
+form.addEventListener('input', throttle(onFormInput, 500));
+
+function onFormInput() {
+    const email = emailiNPUT.value;
+    const message = messageInput.value;
+
+    const formData = {
+        email,
+        message,
     };
 
+    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(formData));
+    // console.log(localStorage)
 };
-const [emailSelector, messageSelector, btnSelector] = form.querySelectorAll('.feedback-form__email, .feedback-form__message, .feedback-form__submit');
 
-console.log(childrens)
-// updateOutput();
-// form.addEventListener("submit", saveMessage);
 
-// function saveMessage(evt) {
-//   evt.preventDefault();
-//   localStorage.setItem(LOCALSTORAGE_KEY, form.elements.message.value);
-//   updateOutput();
-//   form.reset();
-// }
+updateOutput();
+form.addEventListener("submit", saveInfo);
 
-// function updateOutput() {
-//   output.textContent = localStorage.getItem(LOCALSTORAGE_KEY) || "";
-// }
+function saveInfo(evt) {
+  evt.preventDefault();
+  updateOutput();
+  form.reset();
+}
+
+function updateOutput() {
+    // console.log('me actualizsjjo')
+    const savedMessage = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY));
+    
+    if (savedMessage) {
+        if (savedMessage.email == '' || savedMessage.message == '') {
+            alert("Enter the requested data!");
+            form.reset();
+            return false;
+        }
+        emailiNPUT.value = savedMessage.email;
+        messageInput.value = savedMessage.message;
+    };
+
+}
